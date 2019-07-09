@@ -2,9 +2,15 @@ CORES = 0
 VPSADMIN = ../../vpsadmin
 VPSADMIN_ABSPATH := $(shell readlink -m "$(VPSADMIN)")
 
+ifeq ($V,1)
+	V_NIX_BLD = --show-trace -v
+else
+	V_NIX_BLD =
+endif
+
 # default build (configs/qemu.nix)
 build: result
-	nix-build \
+	nix-build $(V_NIX_BLD) \
 	 --arg configuration $(or $(VPSADMINOS_CONFIG),./configs/qemu.nix) \
 	 --arg vpsadmin "$(VPSADMIN_ABSPATH)" \
 	 --out-link result/qemu \
@@ -12,7 +18,7 @@ build: result
 
 # build the system closure without building the squashfs image
 toplevel: result
-	nix-build \
+	nix-build $(V_NIX_BLD) \
 	 --arg configuration $(or $(VPSADMINOS_CONFIG),./configs/qemu.nix) \
 	 --arg vpsadmin "$(VPSADMIN_ABSPATH)" \
 	 --attr config.system.build.toplevel \
@@ -21,7 +27,7 @@ toplevel: result
 
 # build iso image
 iso: result
-	nix-build \
+	nix-build $(V_NIX_BLD) \
 	 --arg configuration $(or $(VPSADMINOS_CONFIG),"{ imports  = [ ./configs/iso.nix ]; }") \
 	 --arg vpsadmin "$(VPSADMIN_ABSPATH)" \
 	 -A config.system.build.isoImage \
@@ -30,7 +36,7 @@ iso: result
 
 # build iso image runner
 iso-local: result
-	nix-build \
+	nix-build $(V_NIX_BLD) \
 	 --arg configuration $(or $(VPSADMINOS_CONFIG),"{ imports  = [ \
 	     ./configs/iso.nix \
 	     ./configs/qemu.nix \
@@ -52,20 +58,20 @@ flash: iso
 	sudo dd if=result/iso/vpsadminos.iso of=/dev/disk/by-label/VPSADMINOS_BOOT_CD bs=1M
 
 test:
-	nix-build \
+	nix-build $(V_NIX_BLD) \
 	--arg system \"x86_64-linux\" \
 	tests/boot.nix
 
 # build nixos container template (rootfs tarball)
 template:
-	nix-build \
+	nix-build $(V_NIX_BLD) \
 	'<nixpkgs/nixos>' \
 	--arg configuration ./lib/nixos-container/configuration.nix \
 	-A config.system.build.tarball \
 	--out-link result/template
 
 os-rebuild:
-	nix-build \
+	nix-build $(V_NIX_BLD) \
 	 --arg configuration ./configs/qemu.nix \
 	 --arg vpsadmin "$(VPSADMIN_ABSPATH)" \
 	 --out-link result/os-rebuild \
