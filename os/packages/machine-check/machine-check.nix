@@ -7,8 +7,8 @@ mkDerivation {
   version = "0.1.0.0";
   src = fetchgit {
     url = "https://github.com/vpsfreecz/machine-check";
-    sha256 = "1b9g5w9xz4bbgy4frggg6qjkb17y490rpdcrn7l51y3a20bdv03a";
-    rev = "740e0ba38b83f5af78597e3e35b7ceafbe070326";
+    sha256 = "1iqmryl1fbjnl14c8hll7x7jnj7c1z9648yxlnwc6v9ylz09iapd";
+    rev = "45f824f84776cb9bda42075238594a5f6fce6a83";
     fetchSubmodules = true;
   };
   isLibrary = true;
