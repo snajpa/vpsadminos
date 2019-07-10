@@ -29,6 +29,7 @@ mkdir /run/wrappers
 chmod +t /tmp
 
 # TODO
+modprobe aufs
 chmod a+rxw /dev/kmsg
 chmod a+rxw /proc/kmsg
 chmod a+rx /proc/fs/aufs/

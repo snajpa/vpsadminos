@@ -47,6 +47,11 @@ module OsCtld
           inherit: true,
         )
         root.devices.add_new(
+          :char, 1, 11, 'rwm',
+          name: '/dev/kmsg',
+          inherit: true,
+        )
+        root.devices.add_new(
           :char, 1, 9, 'rwm',
           name: '/dev/urandom',
           inherit: true,
