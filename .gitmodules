@@ -1,0 +1,4 @@
+[submodule "netlinkrb"]
+	path = netlinkrb
+	url = https://github.com/vpsfreecz/netlinkrb
+	branch = master

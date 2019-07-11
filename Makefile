@@ -20,7 +20,7 @@ libosctl:
 osctl: libosctl
 	./tools/update_gem.sh os/packages osctl $(BUILD_ID)
 
-osctld: libosctl osup
+osctld: libosctl osup netlinkrb
 	./tools/update_gem.sh os/packages osctld $(BUILD_ID)
 
 osctl-repo: libosctl
@@ -40,6 +40,18 @@ svctl: libosctl
 
 osctl-env-exec:
 	./tools/update_gem.sh os/packages tools/osctl-env-exec $(BUILD_ID)
+
+netlinkrb:
+	echo "source File.read('../.rubygems-source').strip" > netlinkrb/Gemfile
+	echo "gemspec" >> netlinkrb/Gemfile
+	pushd netlinkrb && \
+	rake lib/linux/c_struct_sizeof_size_t.rb && \
+	pkg=$$(rake gem | grep File: | awk '{ print $$2; }') && \
+	gem inabox -o $$pkg && \
+	popd
+
+geminabox:
+	rackup geminabox.ru
 
 doc:
 	mkdocs build
@@ -71,5 +83,5 @@ version:
 migration:
 	$(MAKE) -C osup migration
 
-.PHONY: build converter doc doc_serve qemu gems libosctl osctl osctld osctl-repo osup svctl osctl-env-exec
+.PHONY: build converter doc doc_serve qemu gems libosctl osctl osctld osctl-repo osup svctl osctl-env-exec netlinkrb
 .PHONY: version migration

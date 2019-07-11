@@ -1,4 +1,4 @@
-source 'https://rubygems.vpsfree.cz'
+source File.read('../.rubygems-source').strip
 gemspec
 
 gem 'libosctl', path: '../libosctl'

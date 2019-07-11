@@ -1,2 +1,2 @@
-source 'https://rubygems.vpsfree.cz'
+source File.read('../../../.rubygems-source').strip
 gem 'osctl-env-exec', '0.1.0.build20190406095130'
